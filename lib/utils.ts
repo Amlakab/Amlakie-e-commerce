@@ -18,3 +18,20 @@ export const toSlug = (text: string): string =>
     .replace(/-+/g, '-')          // Replace multiple hyphens with single
     .trim()                       // Remove leading/trailing whitespace
     .replace(/^-+|-+$/g, '')      // Remove leading/trailing hyphens
+
+    const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    
+    const NUMBER_FORMATTER = new Intl.NumberFormat('en-US');
+    
+    export function formatCurrency(amount: number): string {
+      return CURRENCY_FORMATTER.format(amount);
+    }
+    
+    export function formatNumber(number: number): string {
+      return NUMBER_FORMATTER.format(number);
+    }
