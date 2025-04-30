@@ -92,7 +92,6 @@ export async function getProductsByTag({ tag,
   })
   .sort({ createdAt: 'desc' })
   .limit(limit)
-  .lean();
 
   return JSON.parse(JSON.stringify(products)) as [IProduct];
 }

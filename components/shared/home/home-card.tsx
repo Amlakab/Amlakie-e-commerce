@@ -1,19 +1,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 
 type CardItem = {
   title: string
-  link?: {
-    text: string
-    href: string
-  }
+  link: { text: string; href: string }
   items: {
     name: string
     image: string
     href: string
-    items?: string[]
   }[]
 }
 
@@ -25,30 +20,40 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
           <CardContent className='p-4 flex-1'>
             <h3 className='text-xl font-bold mb-4'>{card.title}</h3>
             <div className='grid grid-cols-2 gap-4'>
-              {card.items.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className='flex flex-col'
-                >
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    className='aspect-square object-scale-down max-w-full h-auto mx-auto'
-                    height={120}
-                    width={120}
-                  />
-                  <p className='text-center text-sm whitespace-nowrap overflow-hidden text-ellipsis'>
-                    {item.name}
-                  </p>
-                </Link>
-              ))}
+              {/* Only take the first 4 items */}
+              {card.items.slice(0, 4).map((item, index) => {
+                // Create a unique key using available properties
+                const uniqueKey = `${card.title}-${item.name || item.href || index}`
+                
+                return (
+                  <Link
+                    key={uniqueKey}
+                    href={item.href}
+                    className='flex flex-col group'
+                  >
+                    <div className='relative aspect-square w-full'>
+                      <Image
+                        src={item.image}
+                        alt={item.name || 'Product image'}
+                        className='object-contain group-hover:opacity-90 transition-opacity'
+                        fill
+                        sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
+                      />
+                    </div>
+                    <p className='text-center text-sm mt-2 whitespace-nowrap overflow-hidden text-ellipsis'>
+                      {item.name || 'Unnamed Product'}
+                    </p>
+                  </Link>
+                )
+              })}
             </div>
           </CardContent>
-          
           {card.link && (
-            <CardFooter>
-              <Link href={card.link.href} className='mt-4 block'>
+            <CardFooter className='border-t p-4'>
+              <Link 
+                href={card.link.href} 
+                className='text-sm font-medium text-primary hover:underline w-full text-center'
+              >
                 {card.link.text}
               </Link>
             </CardFooter>

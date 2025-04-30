@@ -2,6 +2,7 @@ import { Document, Model, model, models, Schema } from 'mongoose';
 import { IProductInput } from '@/types';
 
 export interface IProduct extends Document, IProductInput {
+  _id: string;
   createdAt: Date;
   updatedAt: Date;
 }

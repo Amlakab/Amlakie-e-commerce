@@ -3,55 +3,55 @@ import {HomeCarousel} from '@/components/shared/home/home-carousel'
 import {HomeCard} from '@/components/shared/home/home-card'
 import  data  from '@/lib/data'
 import { toSlug } from '@/lib/utils'
-import { getProductsByTag, getProductsForCard } from '@/lib/actions/product.actions'
+import { getAllCategories, getProductsByTag, getProductsForCard } from '@/lib/actions/product.actions'
 import { Card, CardContent } from '@/components/ui/card'
 import ProductSlider from '@/components/shared/product/product-slider'
 
 export default async function Page() {
   // Fetch necessary data
-  const categories = ['T-Shirts', 'Jeans', 'Wrist Watches', 'Shoes']
-  const newArrivals = await getProductsForCard({ tag: 'new-arrival' })
-  const bestSellers = await getProductsForCard({ tag: 'best-seller' })
-  const featureds = await getProductsForCard({ tag: 'featured' })
+  const categories = (await getAllCategories()).slice(0, 4)
+  const newArrivals = await getProductsForCard({ tag: 'new-arrival',limit: 4 })
+  const bestSellers = await getProductsForCard({ tag: 'best-seller' ,limit: 4 })
+  const featureds = await getProductsForCard({ tag: 'featured' ,limit: 4 })
   
   const cards = [
-    {
-      title: toSlug('Categories to explore'),
-      link: {
-        text: toSlug('See More'),
-        href: '/search',
+      {
+        title: 'Categories to explore',
+        link: {
+          text: 'See More',
+          href: '/search',
+        },
+        items: categories.map((category) => ({
+          name: category,
+          image: `/images/${toSlug(category)}.jpg`,
+          href: `/search?category=${category}`,
+        })),
       },
-      items: categories.map((category) => ({
-        name: category,
-        image: `/images/${toSlug(category)}.jpg`,
-        href: `/search?category=${category}`,
-      })),
-    },
-    {
-      title: toSlug('Explore New Arrivals'),
-      items: newArrivals,
-      link: {
-        text: toSlug('View All'),
-        href: '/search?tag=new-arrival',
+      {
+        title: 'Explore New Arrivals',
+        items: newArrivals,
+        link: {
+          text: 'View All',
+          href: '/search?tag=new-arrival',
+        },
       },
-    },
-    {
-      title: toSlug('Discover Best Sellers'),
-      items: bestSellers,
-      link: {
-        text: toSlug('View All'),
-        href: '/search?tag=new-arrival',
+      {
+        title: 'Discover Best Sellers',
+        items: bestSellers,
+        link: {
+          text: 'View All',
+          href: '/search?tag=new-arrival',
+        },
       },
-    },
-    {
-      title: toSlug('Featured Products'),
-      items: featureds,
-      link: {
-        text: toSlug('Shop Now'),
-        href: '/search?tag=new-arrival',
+      {
+        title: 'Featured Products',
+        items: featureds,
+        link: {
+          text: 'Shop Now',
+          href: '/search?tag=new-arrival',
+        },
       },
-    },
-  ]
+    ]
 
   const todaysDeals = await getProductsByTag({ tag: 'todays-deal'});
   const bestSellerProducts = await getProductsByTag({ tag: 'best-seller'});
