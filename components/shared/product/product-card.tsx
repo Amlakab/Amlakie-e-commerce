@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -7,6 +8,7 @@ import Rating from './rating';
 import { formatNumber } from '@/lib/utils';
 import ProductPrice from './product-price';
 import ImageHover from './image-hover';
+import { motion } from 'framer-motion';
 
 interface ProductCardProps {
   product: IProduct;
@@ -14,6 +16,12 @@ interface ProductCardProps {
   hideBorder?: boolean;
   hiddenAddToCart?: boolean;
 }
+
+// Adjusted Animation variant for less smooth scroll effect
+const fadeInUp = {
+  initial: { opacity: 0, y: 25, rotate: 5, scale: 0.9 },  // Slight vertical movement and scale reduction
+  animate: { opacity: 1, y: 0, rotate: 0, scale: 1 }, // Reset to normal state
+};
 
 const ProductCard = ({
   product,
@@ -69,26 +77,40 @@ const ProductCard = ({
     </div>
   );
 
-  return hideBorder ? (
-    <div className="flex flex-col">
-      <ProductImage />
-      {!hideDetails && (
-        <div className="p-3 flex-1 text-center">
-          <ProductDetails />
-        </div>
+  const Wrapper = hideBorder ? motion.div : motion(Card);
+
+  return (
+    <Wrapper
+      initial="initial"
+      whileInView="animate"
+      viewport={{ once: false }} // This allows the animation to trigger multiple times on scroll
+      whileHover={{ scale: 1.1 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }} // Shortened duration and faster easing for less smoothness
+      variants={fadeInUp}
+      className="flex flex-col"
+    >
+      {hideBorder ? (
+        <>
+          <ProductImage />
+          {!hideDetails && (
+            <div className="p-3 flex-1 text-center">
+              <ProductDetails />
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <CardHeader className="p-3">
+            <ProductImage />
+          </CardHeader>
+          {!hideDetails && (
+            <CardContent className="p-3 flex-1 text-center">
+              <ProductDetails />
+            </CardContent>
+          )}
+        </>
       )}
-    </div>
-  ) : (
-    <Card className="flex flex-col">
-      <CardHeader className="p-3">
-        <ProductImage />
-      </CardHeader>
-      {!hideDetails && (
-        <CardContent className="p-3 flex-1 text-center">
-          <ProductDetails />
-        </CardContent>
-      )}
-    </Card>
+    </Wrapper>
   );
 };
 

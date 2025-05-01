@@ -132,3 +132,27 @@
     @apply font-bold text-lg lg:text-xl;
   }
 }
+
+:root {
+  --header-height: 96px; /* Default height */
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-height: 128px; /* Mobile height */
+  }
+}
+/* globals.css or specific component CSS */
+
+.page-enter-animation {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
