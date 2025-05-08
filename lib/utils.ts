@@ -17,7 +17,7 @@ export const toSlug = (text: string): string =>
     .replace(/\s+/g, '-')         // Replace spaces with hyphens  // Replace multiple hyphens with single
     .trim()                       // Remove leading/trailing whitespace
     .replace(/^-+|-+$/g, '')      // Remove leading/trailing hyphens
-
+    .replace(/-+/g, '-')         // Replace multiple hyphens with single
 
     const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -35,3 +35,9 @@ export const toSlug = (text: string): string =>
     export function formatNumber(number: number): string {
       return NUMBER_FORMATTER.format(number);
     }
+
+    export const round2 = (num: number) =>
+      Math.round((num + Number.EPSILON) * 100) / 100
+    
+    export const generateId = () =>
+      Array.from({ length: 24 }, () => Math.floor(Math.random() * 10)).join('')

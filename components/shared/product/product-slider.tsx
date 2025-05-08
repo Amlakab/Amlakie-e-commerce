@@ -41,7 +41,7 @@ export default function ProductSlider({
                 product={product}
                 hideDetails={hideDetails}
                 hideBorder
-                hiddenAddToCart
+                hideAddToCart
               />
             </CarouselItem>
           ))}
