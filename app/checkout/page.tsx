@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import CheckoutForm from './checkout-form'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 
@@ -11,9 +12,5 @@ export default async function CheckoutPage() {
   if (!session?.user) {
     redirect('/sign-in?callbackUrl=/checkout')
   }
-  return (
-    <div>
-      <h1>Checkout</h1>
-    </div>
-  )
+  return <CheckoutForm />
 }
