@@ -1,6 +1,6 @@
+// app/sign-up/signup-form.tsx
 'use client'
 import { redirect, useSearchParams } from 'next/navigation'
-
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
@@ -20,9 +20,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { UserSignUpSchema } from '@/lib/validator'
 import { Separator } from '@/components/ui/separator'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
-
-// ✅ Updated toast import from Sonner
 import { toast } from 'sonner'
+import { GoogleSignUpButton } from './google-signup-button'
+import SeparatorWithOr from '@/components/shared/separator-or'
 
 const signUpDefaultValues =
   process.env.NODE_ENV === 'development'
@@ -39,7 +39,7 @@ const signUpDefaultValues =
         confirmPassword: '',
       }
 
-export default function CredentialsSignInForm() {
+export default function SignUpForm() {
   const {
     setting: { site },
   } = useSettingStore()
@@ -72,95 +72,105 @@ export default function CredentialsSignInForm() {
       if (isRedirectError(error)) {
         throw error
       }
-
       toast.error('Invalid email or password')
     }
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input type='hidden' name='callbackUrl' value={callbackUrl} />
-        <div className='space-y-6'>
-          <FormField
-            control={control}
-            name='name'
-            render={({ field }) => (
-              <FormItem className='w-full'>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder='Enter name address' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <div className="space-y-6">
+      <Form {...form}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input type='hidden' name='callbackUrl' value={callbackUrl} />
+          <div className='space-y-6'>
+            <FormField
+              control={control}
+              name='name'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Enter name' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={control}
-            name='email'
-            render={({ field }) => (
-              <FormItem className='w-full'>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder='Enter email address' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={control}
+              name='email'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Enter email address' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={control}
-            name='password'
-            render={({ field }) => (
-              <FormItem className='w-full'>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type='password'
-                    placeholder='Enter password'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={control}
-            name='confirmPassword'
-            render={({ field }) => (
-              <FormItem className='w-full'>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type='password'
-                    placeholder='Confirm Password'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div>
-            <Button type='submit'>Sign Up</Button>
+            <FormField
+              control={control}
+              name='password'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='password'
+                      placeholder='Enter password'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name='confirmPassword'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='password'
+                      placeholder='Confirm Password'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div>
+              <Button type='submit' className='w-full'>
+                Sign Up
+              </Button>
+            </div>
           </div>
-          <div className='text-sm'>
-            By creating an account, you agree to {site.name}&apos;s{' '}
-            <Link href='/page/conditions-of-use'>Conditions of Use</Link> and{' '}
-            <Link href='/page/privacy-policy'> Privacy Notice. </Link>
-          </div>
-          <Separator className='mb-4' />
-          <div className='text-sm'>
-            Already have an account?{' '}
-            <Link className='link' href={`/sign-in?callbackUrl=${callbackUrl}`}>
-              Sign In
-            </Link>
-          </div>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+
+      <div className='text-sm'>
+        By creating an account, you agree to {site.name}&apos;s{' '}
+        <Link href='/page/conditions-of-use'>Conditions of Use</Link> and{' '}
+        <Link href='/page/privacy-policy'>Privacy Notice</Link>
+      </div>
+      
+      <SeparatorWithOr />
+      
+      <GoogleSignUpButton />
+      
+      <Separator className='mb-4' />
+      
+      <div className='text-sm'>
+        Already have an account?{' '}
+        <Link className='link' href={`/sign-in?callbackUrl=${callbackUrl}`}>
+          Sign In
+        </Link>
+      </div>
+    </div>
   )
 }

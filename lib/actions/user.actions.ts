@@ -101,6 +101,17 @@ export const SignInWithGoogle = async () => {
   await signIn('google')
 }
 
+// user.actions.ts
+export const SignUpWithGoogle = async () => {
+  const result = await signIn('google', { 
+    redirect: false 
+  });
+  
+  if (result?.error) {
+    throw new Error(result.error);
+  }
+}
+
 // GET
 export async function getAllUsers({
   limit,
